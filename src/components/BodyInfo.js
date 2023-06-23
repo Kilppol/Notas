@@ -10,46 +10,63 @@ import React, { useState } from 'react';
 import ButtonLogin from './ButtonLogin';
 
 export default function BodyInfo() {
-	const notas = {
-		nota1: { titulo: 'xd', contenido: 'content' },
+	const [notas, setNotas] = useState([
+		{ titulo: 'Nota1ejem', contenido: 'contentUnoEjem' },
+	]);
+	const [titulo, setTitulo] = useState('');
+	const [contenido, setContenido] = useState('');
+
+	const agregarNota = () => {
+		const nuevaNota = { titulo: titulo, contenido: contenido };
+		setNotas([...notas, nuevaNota]);
+		setTitulo('');
+		setContenido('');
 	};
+
 	return (
 		<View style={styles.personajeText}>
 			<View style={styles.textoWrapper}>
 				<Text style={styles.textoWrapped}>Titulo</Text>
 			</View>
 			<TextInput
-				placeholder='Contrasena 12345678'
+				placeholder='Título'
 				style={styles.inputTextT}
 				autoCapitalize='none'
-				secureTextEntry={false}
-				value='erre'
+				onChangeText={(text) => setTitulo(text)}
+				value={titulo}
 			/>
 
 			<View style={styles.textoWrapper}>
 				<Text style={styles.textoWrapped}>Contenido</Text>
 			</View>
 			<TextInput
-				placeholder='Contrasena 12345678'
+				placeholder='Contenido'
 				style={styles.inputText}
 				autoCapitalize='none'
-				secureTextEntry={false}
-				value='erre'
+				onChangeText={(text) => setContenido(text)}
+				value={contenido}
 			/>
-			<ButtonLogin />
-			<ScrollView style={styles.flatList}>
-				<Text style={styles.personajeEspecie}></Text>
-				<View style={styles.textoWrapper}>
-					<Text style={styles.textoWrapped}>
-						Titulo:{notas.nota1.titulo}{' '}
-					</Text>
-				</View>
-				<View style={styles.textoWrapper}>
-					<Text style={styles.textoWrapped}>
-						Contenido: {notas.nota1.contenido}{' '}
-					</Text>
-				</View>
-			</ScrollView>
+			<ButtonLogin onPress={agregarNota} />
+
+			<FlatList
+				style={styles.flatList}
+				data={notas}
+				renderItem={({ item }) => (
+					<View>
+						<View style={styles.textoWrapper}>
+							<Text style={styles.textoWrapped}>
+								Titulo: {item.titulo}
+							</Text>
+						</View>
+						<View style={styles.textoWrapper}>
+							<Text style={styles.textoWrapped}>
+								Contenido: {item.contenido}
+							</Text>
+						</View>
+					</View>
+				)}
+				keyExtractor={(item, index) => index.toString()}
+			/>
 		</View>
 	);
 }
